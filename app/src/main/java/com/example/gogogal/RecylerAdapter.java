@@ -17,8 +17,10 @@ import java.util.List;
 public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.CustomViewHolder> {
 
     private  ArrayList<RecyclerData> arrayList;
+    private Context context;
 
-    public RecylerAdapter(ArrayList<RecyclerData> arrayList) {
+    public RecylerAdapter(ArrayList<RecyclerData> arrayList, Context context) {
+        this.context = context;
         this.arrayList = arrayList;
     }
 
@@ -43,6 +45,10 @@ public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.CustomVi
             public void onClick(View v) {
                 String curName = holder.textView.getText().toString();
                 Toast.makeText(v.getContext(),curName,Toast.LENGTH_SHORT).show();
+                //아이템 클릭시 인테트 해보기
+                Context context = v.getContext();
+                Intent intent =new Intent(v.getContext(),ProfileActivity.class);
+                context.startActivity(intent);
             }
         });
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {

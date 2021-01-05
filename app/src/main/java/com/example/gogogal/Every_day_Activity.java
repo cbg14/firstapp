@@ -31,6 +31,8 @@ public class Every_day_Activity extends AppCompatActivity implements View.OnClic
     private ArrayList<RecyclerData> arrayList;
     private  AppDatabase db;
 
+    private  Context context;
+
 
 
     @Override
@@ -60,7 +62,7 @@ public class Every_day_Activity extends AppCompatActivity implements View.OnClic
         recyclerView.setLayoutManager(linearLayoutManager);
 
         arrayList = new ArrayList<>();
-        recylerAdapter = new RecylerAdapter(arrayList);
+        recylerAdapter = new RecylerAdapter(arrayList, context);
         recyclerView.setAdapter(recylerAdapter);
 
 
