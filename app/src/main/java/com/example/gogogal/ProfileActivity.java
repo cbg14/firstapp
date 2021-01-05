@@ -147,7 +147,7 @@ public class ProfileActivity  extends AppCompatActivity {
             plan_name  = extras.getString("plan_name");
         }
         System.out.println("===========값넘어오는지 확인:"+plan_name);
-        et_exercise_name.setText(plan_name.toString());
+        et_exercise_name.setText(plan_name);
     }
 
     /*프로그램 종료됬을때 실행된다.*/

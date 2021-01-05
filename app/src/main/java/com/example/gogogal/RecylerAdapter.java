@@ -48,7 +48,11 @@ public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.CustomVi
                 //아이템 클릭시 인테트 해보기
                 Context context = v.getContext();
                 Intent intent =new Intent(v.getContext(),ProfileActivity.class);
+                //화면넘기면서 값 넘기기
+                intent.putExtra("plan_name",curName);
+                System.out.println("====값을 보내기전 잘 담기는지 확인:"+curName);
                 context.startActivity(intent);
+
             }
         });
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {

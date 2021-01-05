@@ -65,24 +65,12 @@ public class Every_day_Activity extends AppCompatActivity implements View.OnClic
         recylerAdapter = new RecylerAdapter(arrayList, context);
         recyclerView.setAdapter(recylerAdapter);
 
-
-
-        //
+        //아이템 추가버튼 클릭
         item_add = findViewById(R.id.item_add);
         item_add.setOnClickListener(this::onClick);
 
-        //setUserInfo();
-
-
     }
 
-    /*private void setUserInfo() {
-        arrayList.add(new RecyclerData("감자"));
-        arrayList.add(new RecyclerData("kim"));
-        arrayList.add(new RecyclerData("nick"));
-    }*/
-
-//
 
     @Override
     public void onClick(View v) {
