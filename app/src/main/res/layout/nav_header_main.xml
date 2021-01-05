@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/side_nav_bar"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingTop="16dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="16dp"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <ProgressBar
+            android:id="@+id/progress_bar1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:indeterminateOnly="false"
+            android:progressDrawable="@drawable/circle"
+            tools:progress="60"></ProgressBar>
+
+        <ProgressBar
+            android:id="@+id/progress_bar2"
+            android:layout_width="100dp"
+            android:layout_weight="1"
+            android:layout_height="100dp"
+            android:indeterminateOnly="false"
+            android:progressDrawable="@drawable/circle"
+            tools:progress="80">
+        </ProgressBar>
+
+        <ProgressBar
+            android:id="@+id/progress_bar3"
+            android:layout_width="100dp"
+            android:layout_weight="1"
+            android:layout_height="100dp"
+            android:indeterminateOnly="false"
+            android:progressDrawable="@drawable/circle"
+            tools:progress="20">
+        </ProgressBar>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="하루 일과">
+        </TextView>
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="목표치">
+        </TextView>
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="확률">
+        </TextView>
+    </LinearLayout>
+
+
+
+</LinearLayout>
