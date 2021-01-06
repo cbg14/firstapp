@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.room.Room;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class CustomDialog  extends Dialog  implements  View.OnClickListener{
     private  Button saveButton,cancelButton;
     private EditText et_text;
 
+    AppDatabase db;
 
     private  CustomDialogListener customDialogListener;
     public CustomDialog(@NonNull Context context) {
@@ -49,6 +51,8 @@ public class CustomDialog  extends Dialog  implements  View.OnClickListener{
 
         saveButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
+
+
     }
 
 

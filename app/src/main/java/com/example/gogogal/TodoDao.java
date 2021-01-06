@@ -1,19 +1,32 @@
 package com.example.gogogal;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import java.util.Collection;
 import java.util.List;
 
 @Dao
 public interface TodoDao {
-    @Query("SELECT * FROM Todo")
-    LiveData<List<Todo>> getAll();
 
+    @Query("SELECT * FROM Todo")
+    List<Todo> getAll();
+
+    @Query("SELECT * FROM Todo WHERE id =:id_value")
+    List<Todo> select(int id_value);
+
+    @Query("SELECT title FROM Todo WHERE id=:id_value")
+    public String getTitle(int id_value);
+
+    //제목을 가져와서 id값 가져오기
+    @Query("SELECT id FROM Todo WHERE title =:title")
+    public int getID(String title);
+
+    @Query("DELETE FROM Todo WHERE title=:title")
+    public int getDelete_title(String title);
     @Insert
     void insert(Todo todo);
 
@@ -23,6 +36,4 @@ public interface TodoDao {
     @Delete
     void delete(Todo todo);
 
-    @Query("DELETE FROM Todo")
-    void deleteAll();
 }
