@@ -94,7 +94,7 @@ public class Every_day_Activity extends AppCompatActivity implements View.OnClic
                       RecyclerData recyclerData = new RecyclerData(plan_name);
                       arrayList.add(recyclerData);
                         System.out.println("========Evert_Day_Activity===========");
-                        db.todoDao().insert(new Todo(plan_name));
+                        db.todoDao().insert(new Todo(plan_name,0,0,0,0));
                         System.out.println(db.todoDao().getAll().toString());
                       recylerAdapter.notifyDataSetChanged();
 

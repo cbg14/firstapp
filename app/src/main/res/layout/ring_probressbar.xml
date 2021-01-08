@@ -7,21 +7,15 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     >
+
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="#BFFF5722"
-        app:layout_anchor="@+id/appBarLayout"
-        app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/Theme.GoGogal.PopupOverlay">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="목표 달성" />
+        app:layout_constraintTop_toTopOf="parent">
     </androidx.appcompat.widget.Toolbar>
-
 
     <ProgressBar
         android:id="@+id/progress_bar"

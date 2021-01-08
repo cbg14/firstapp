@@ -21,9 +21,9 @@ public interface TodoDao {
     @Query("SELECT title FROM Todo WHERE id=:id_value")
     public String getTitle(int id_value);
 
-    //제목을 가져와서 id값 가져오기
-    @Query("SELECT id FROM Todo WHERE title =:title")
-    public int getID(String title);
+    //받은 제목으로 검색해서 데이터 가져오기
+    @Query("SELECT * FROM Todo WHERE title =:title")
+    public List<Todo> getDate(String title);
 
     @Query("DELETE FROM Todo WHERE title=:title")
     public int getDelete_title(String title);

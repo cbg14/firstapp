@@ -12,34 +12,36 @@
         app:cardElevation="5dp"
         app:cardCornerRadius="10dp"
         app:cardUseCompatPadding="true">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </CheckBox>
-
-        <TextView
-            android:id="@+id/tv_rc_itemlist_name"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="아무 것도 안하기."
-            android:textColor="@color/black"
-            android:layout_gravity="center_vertical"
-            android:textSize="25dp">
-        </TextView>
+            android:orientation="horizontal"
+            android:layout_margin="15dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="25dp">
+            <!--        <CheckBox-->
+            <!--            android:layout_width="wrap_content"-->
+            <!--            android:layout_height="wrap_content">-->
+            <!--        </CheckBox>-->
+            <TextView
+                android:id="@+id/tv_rc_itemlist_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="아무 것도 안하기."
+                android:textColor="@color/black"
+                android:textSize="25dp"></TextView>
 
-        </TextView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="30%"
+                android:id="@+id/tv_percent"
+                android:textSize="25dp" />
 
-    </LinearLayout>
+
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
 </LinearLayout>

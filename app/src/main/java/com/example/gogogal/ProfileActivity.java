@@ -1,6 +1,7 @@
 package com.example.gogogal;
 
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,14 +11,22 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
+import java.util.List;
 
 public class ProfileActivity  extends AppCompatActivity {
 
@@ -29,14 +38,19 @@ public class ProfileActivity  extends AppCompatActivity {
     private TextView text_all_count, text_check_count;
     String ex_count = "0";
     private AdView mAdView;
+    private  AppDatabase db;
+    Toolbar toolbar;
 
-
-
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ring_probressbar);
 
+        //툴바 뒤로가기 만들기
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //광고 삽입
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
@@ -61,8 +75,26 @@ public class ProfileActivity  extends AppCompatActivity {
 
 
 
-        SharedPreferences sharedPreferences = getSharedPreferences(ex_count, 0);
 
+        //db = Room.databaseBuilder(this,AppDatabase.class,"todo-db").allowMainThreadQueries().build();
+        db= Room.databaseBuilder(this,AppDatabase.class,"todo-db").allowMainThreadQueries().build();
+
+
+        String plan_name = "";
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            plan_name  = extras.getString("plan_name");
+        }
+
+        System.out.println("====파일ProfileActivtity=====값넘어오는지 확인:"+plan_name);
+        et_exercise_name.setText(plan_name);
+
+        List<Todo> item = db.todoDao().getDate(plan_name);
+        item.get(0).getEx_all_count();
+        System.out.println("========item에 들어온 값 확인:"+item.toString());
+
+        //간단하게 데이터 저장하기
+        SharedPreferences sharedPreferences = getSharedPreferences(ex_count, 0);
         String value_excount = sharedPreferences.getString("value_excount", "");
         String value_exset = sharedPreferences.getString("value_exset", "");
         String value_protext = sharedPreferences.getString("value_protext", "");
@@ -141,14 +173,10 @@ public class ProfileActivity  extends AppCompatActivity {
             }
         });
 
-        String plan_name = "";
-        Bundle extras = getIntent().getExtras();
-        if(extras != null) {
-            plan_name  = extras.getString("plan_name");
-        }
-        System.out.println("====파일ProfileActivtity=====값넘어오는지 확인:"+plan_name);
-        et_exercise_name.setText(plan_name);
+
+
     }
+
 
     /*프로그램 종료됬을때 실행된다.*/
     @Override
