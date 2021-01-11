@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -15,6 +16,8 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +35,8 @@ public class Every_day_Activity extends AppCompatActivity implements View.OnClic
     private LinearLayoutManager linearLayoutManager;
     private ArrayList<RecyclerData> arrayList;
     private  AppDatabase db;
+    private TextView tv_progs, text_done;
+    int progs=0;
 
     private  Context context;
     String name ="";
@@ -57,6 +62,7 @@ public class Every_day_Activity extends AppCompatActivity implements View.OnClic
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
+        tv_progs = findViewById(R.id.tv_percent);
         //리사이클러 뷰
         recyclerView = findViewById(R.id.recycler_view);
         linearLayoutManager = new LinearLayoutManager(this);
@@ -71,16 +77,36 @@ public class Every_day_Activity extends AppCompatActivity implements View.OnClic
         System.out.println("=======item============");
         System.out.println(item.toString());
         for(int i=0; i<item.size();i++){
-            RecyclerData recyclerData = new RecyclerData(item.get(i).getTitle());
+            RecyclerData recyclerData = new RecyclerData(item.get(i).getTitle(),item.get(i).getProgr());
             arrayList.add(recyclerData);
-
+            if(item.get(i).getProgr() > 100){
+            
+                //text_done.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
+            }
         }
+
 
         //아이템 추가버튼 클릭
         item_add = findViewById(R.id.item_add);
         item_add.setOnClickListener(this::onClick);
 
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        System.out.println("onstart실행");
+        System.out.println(db.todoDao().getAll().toString());
+        arrayList.clear();
+        recylerAdapter.notifyDataSetChanged();
+        List<Todo> item = db.todoDao().getAll();
+        for(int i=0; i<item.size();i++){
+            RecyclerData recyclerData = new RecyclerData(item.get(i).getTitle(),item.get(i).getProgr());
+            arrayList.add(recyclerData);
+
+        }
+    }
+
 
 
     @Override
@@ -91,7 +117,7 @@ public class Every_day_Activity extends AppCompatActivity implements View.OnClic
                 dialog.setDialogListener(new CustomDialog.CustomDialogListener() {
                     @Override
                     public void okClicked(String plan_name) {
-                      RecyclerData recyclerData = new RecyclerData(plan_name);
+                      RecyclerData recyclerData = new RecyclerData(plan_name,0);
                       arrayList.add(recyclerData);
                         System.out.println("========Evert_Day_Activity===========");
                         db.todoDao().insert(new Todo(plan_name,0,0,0,0));

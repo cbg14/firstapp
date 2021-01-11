@@ -2,6 +2,7 @@ package com.example.gogogal;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.Room;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.CustomViewHolder> {
@@ -22,6 +25,7 @@ public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.CustomVi
     private Context context;
     private  AppDatabase db;
     String curName;
+    int curpercent;
 
     public RecylerAdapter(ArrayList<RecyclerData> arrayList, Context context) {
         this.context = context;
@@ -42,19 +46,27 @@ public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.CustomVi
     //뷰가 실제로 보여질때
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
         holder.textView.setText(arrayList.get(position).getPlan_name());
+        holder.tv_progr.setText(String.valueOf(arrayList.get(position).getProgr())+"%");
+        if(arrayList.get(position).getProgr()>=100){
+            holder.textView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
+        }else{
+            holder.textView.setPaintFlags(0);
+        }
 
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                  curName = holder.textView.getText().toString();
-                Toast.makeText(v.getContext(),curName,Toast.LENGTH_SHORT).show();
+
+
+               // Toast.makeText(v.getContext(),curName,Toast.LENGTH_SHORT).show();
                 //아이템 클릭시 인테트 해보기
                  context = v.getContext();
                 Intent intent =new Intent(v.getContext(),ProfileActivity.class);
                 //화면넘기면서 값 넘기기
                 intent.putExtra("plan_name",curName);
-                System.out.println("==RecycleAdapter==값을 보내기전 잘 담기는지 확인:"+curName);
+                System.out.println("==RecycleAdapter==값을 보내기전 잘 담기는지 curname/curpercent 확인:"+curName+"/"+curpercent);
                 context.startActivity(intent);
 
 
@@ -89,11 +101,14 @@ public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.CustomVi
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
         protected  TextView textView;
+        protected TextView tv_progr;
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
 
             textView = itemView.findViewById(R.id.tv_rc_itemlist_name);
+            tv_progr = itemView.findViewById(R.id.tv_percent);
+
         }
     }
 }

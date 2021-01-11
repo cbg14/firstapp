@@ -29,8 +29,9 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import java.util.List;
 
 public class ProfileActivity  extends AppCompatActivity {
-
-    int progr = 0, count_check = 0;
+//public List<Todo>  upDate(String title,int ex_all_count,int ex_set,int count_check,int progr ,int id_value);
+    int progr = 0, count_check = 0 , ex_all_count=0, ex_set=0,id_value=0;
+    String plan_name;
     private ProgressBar progressBar;
     private TextView progressText;
     private Button bt_plus, bt_dsc, bt_clear;
@@ -80,44 +81,37 @@ public class ProfileActivity  extends AppCompatActivity {
         db= Room.databaseBuilder(this,AppDatabase.class,"todo-db").allowMainThreadQueries().build();
 
 
-        String plan_name = "";
+
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             plan_name  = extras.getString("plan_name");
         }
 
         System.out.println("====파일ProfileActivtity=====값넘어오는지 확인:"+plan_name);
-        et_exercise_name.setText(plan_name);
+
 
         List<Todo> item = db.todoDao().getDate(plan_name);
         item.get(0).getEx_all_count();
         System.out.println("========item에 들어온 값 확인:"+item.toString());
 
-        //간단하게 데이터 저장하기
-        SharedPreferences sharedPreferences = getSharedPreferences(ex_count, 0);
-        String value_excount = sharedPreferences.getString("value_excount", "");
-        String value_exset = sharedPreferences.getString("value_exset", "");
-        String value_protext = sharedPreferences.getString("value_protext", "");
-        String value_provalue = sharedPreferences.getString("value_provalue", "0");
-        String value_name = sharedPreferences.getString("value_name", "");
-        String value_check_count = sharedPreferences.getString("value_check_count", "");
 
-        et_exertcise_count.setText(value_excount);
-        et_set_count.setText(value_exset);
-        progressText.setText(value_protext);
+        et_exercise_name.setText(item.get(0).getTitle());
+        et_exertcise_count.setText(String.valueOf(item.get(0).getEx_all_count()));
+        et_set_count.setText(String.valueOf(item.get(0).getEx_set()));
+        progressText.setText(String.valueOf(item.get(0).getProgr())+"%");
 
-        progressBar.setProgress(Integer.parseInt(value_provalue));
-        progr = Integer.parseInt(value_provalue);
-
-
-        et_exercise_name.setText(value_name);
-        text_all_count.setText(et_exertcise_count.getText());
-        text_check_count.setText(value_check_count);
-        if (value_check_count.equals("")){
-            count_check =0;
+        if( item.get(0).getProgr() ==0){
+            progressBar.setProgress(0);
         }else{
-            count_check =Integer.parseInt(value_check_count);
+            progressBar.setProgress(item.get(0).getProgr());
         }
+
+        progr = item.get(0).getProgr();
+
+
+        text_all_count.setText(et_exertcise_count.getText());
+        text_check_count.setText(String.valueOf(item.get(0).getCount_check()));
+        count_check = item.get(0).getCount_check();
 
         bt_clear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,26 +172,17 @@ public class ProfileActivity  extends AppCompatActivity {
     }
 
 
+
     /*프로그램 종료됬을때 실행된다.*/
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onPause() {
+        super.onPause();
+        //public List<Todo>  upDate(String title,///int ex_all_count,///int ex_set,///int count_check,///int progr,///int id_value);
+        List<Todo> item = db.todoDao().getDate(plan_name);
+        db.todoDao().upDate(et_exercise_name.getText().toString(),Integer.valueOf(et_exertcise_count.getText().toString()),Integer.valueOf(et_set_count.getText().toString()),Integer.valueOf(text_check_count.getText().toString()),progr,item.get(0).getId());
+        System.out.println("=======update되었습니다.======");
+        System.out.println(db.todoDao().getDate(et_exercise_name.getText().toString()));
 
-        SharedPreferences sharedPreferences = getSharedPreferences(ex_count, 0);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        String value_excount = et_exertcise_count.getText().toString();
-        String value_exset = et_set_count.getText().toString();
-        String value_protext = progressText.getText().toString();
-        String value_provalue = String.valueOf(progr);
-        String value_name = et_exercise_name.getText().toString();
-        String value_check_count = text_check_count.getText().toString();
-        editor.putString("value_excount", value_excount);
-        editor.putString("value_exset", value_exset);
-        editor.putString("value_protext", value_protext);
-        editor.putString("value_provalue", value_provalue);
-        editor.putString("value_name", value_name);
-        editor.putString("value_check_count", value_check_count);
-        editor.commit();
     }
 
     public void btn_all_clean(View view) {

@@ -33,7 +33,11 @@ public interface TodoDao {
     @Update
     void update(Todo todo);
 
+    @Query("UPDATE Todo SET title=:title, count_check=:count_check, ex_all_count=:ex_all_count, ex_set=:ex_set, progr=:progr WHERE id=:id_value")
+    public void upDate(String title,int ex_all_count,int ex_set,int count_check,int progr ,int id_value);
+
     @Delete
     void delete(Todo todo);
+
 
 }
