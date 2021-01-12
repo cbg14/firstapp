@@ -28,9 +28,9 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 
 import java.util.List;
 
-public class ProfileActivity  extends AppCompatActivity {
-//public List<Todo>  upDate(String title,int ex_all_count,int ex_set,int count_check,int progr ,int id_value);
-    int progr = 0, count_check = 0 , ex_all_count=0, ex_set=0,id_value=0;
+public class ProfileActivity extends AppCompatActivity {
+    //public List<Todo>  upDate(String title,int ex_all_count,int ex_set,int count_check,int progr ,int id_value);
+    int progr = 0, count_check = 0, ex_all_count = 0, ex_set = 0, id_value = 0;
     String plan_name;
     private ProgressBar progressBar;
     private TextView progressText;
@@ -39,7 +39,7 @@ public class ProfileActivity  extends AppCompatActivity {
     private TextView text_all_count, text_check_count;
     String ex_count = "0";
     private AdView mAdView;
-    private  AppDatabase db;
+    private AppDatabase db;
     Toolbar toolbar;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -75,41 +75,39 @@ public class ProfileActivity  extends AppCompatActivity {
         bt_clear = findViewById(R.id.bt_clear);
 
 
-
-
         //db = Room.databaseBuilder(this,AppDatabase.class,"todo-db").allowMainThreadQueries().build();
-        db= Room.databaseBuilder(this,AppDatabase.class,"todo-db").allowMainThreadQueries().build();
-
+        db = Room.databaseBuilder(this, AppDatabase.class, "todo-db").allowMainThreadQueries().build();
 
 
         Bundle extras = getIntent().getExtras();
-        if(extras != null) {
-            plan_name  = extras.getString("plan_name");
+        if (extras != null) {
+            plan_name = extras.getString("plan_name");
         }
 
-        System.out.println("====파일ProfileActivtity=====값넘어오는지 확인:"+plan_name);
+        System.out.println("====파일ProfileActivtity=====값넘어오는지 확인:" + plan_name);
 
 
         List<Todo> item = db.todoDao().getDate(plan_name);
         item.get(0).getEx_all_count();
-        System.out.println("========item에 들어온 값 확인:"+item.toString());
+        System.out.println("========item에 들어온 값 확인:" + item.toString());
 
-
+        //이름
         et_exercise_name.setText(item.get(0).getTitle());
         et_exertcise_count.setText(String.valueOf(item.get(0).getEx_all_count()));
         et_set_count.setText(String.valueOf(item.get(0).getEx_set()));
-        progressText.setText(String.valueOf(item.get(0).getProgr())+"%");
+        //프로그래스바 퍼센트 텍스트뷰
+        progressText.setText(String.valueOf(item.get(0).getProgr()) + "%");
 
-        if( item.get(0).getProgr() ==0){
+        if (item.get(0).getProgr() == 0) {
             progressBar.setProgress(0);
-        }else{
+        } else {
             progressBar.setProgress(item.get(0).getProgr());
         }
 
         progr = item.get(0).getProgr();
 
 
-        text_all_count.setText(et_exertcise_count.getText());
+        text_all_count.setText(String.valueOf(item.get(0).getEx_all_count()));
         text_check_count.setText(String.valueOf(item.get(0).getCount_check()));
         count_check = item.get(0).getCount_check();
 
@@ -130,19 +128,24 @@ public class ProfileActivity  extends AppCompatActivity {
 
             }
 
+            //텍스트가 변경될떄 마다 호출된다.
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                if(et_exertcise_count.getText().toString().equals("")){
+                    et_exertcise_count.setText("0");
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+
                 progressBar.setProgress(0);
                 progressText.setText("0%");
                 progr = 0;
                 text_all_count.setText(et_exertcise_count.getText());
                 text_check_count.setText("0");
                 count_check = 0;
+
             }
         });
         et_set_count.addTextChangedListener(new TextWatcher() {
@@ -153,11 +156,14 @@ public class ProfileActivity  extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                if(et_set_count.getText().toString().equals("")){
+                    et_set_count.setText("0");
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+
                 progressBar.setProgress(0);
                 progressText.setText("0%");
                 progr = 0;
@@ -168,9 +174,7 @@ public class ProfileActivity  extends AppCompatActivity {
         });
 
 
-
     }
-
 
 
     /*프로그램 종료됬을때 실행된다.*/
@@ -178,8 +182,14 @@ public class ProfileActivity  extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         //public List<Todo>  upDate(String title,///int ex_all_count,///int ex_set,///int count_check,///int progr,///int id_value);
+        if(et_exertcise_count.getText().toString().equals("")){
+            et_exertcise_count.setText("0");
+        }
+        if (et_set_count.getText().toString().equals("")){
+            et_set_count.setText("0");
+        }
         List<Todo> item = db.todoDao().getDate(plan_name);
-        db.todoDao().upDate(et_exercise_name.getText().toString(),Integer.valueOf(et_exertcise_count.getText().toString()),Integer.valueOf(et_set_count.getText().toString()),Integer.valueOf(text_check_count.getText().toString()),progr,item.get(0).getId());
+        db.todoDao().upDate(et_exercise_name.getText().toString(), Integer.valueOf(et_exertcise_count.getText().toString()), Integer.valueOf(et_set_count.getText().toString()), Integer.valueOf(text_check_count.getText().toString()), progr, item.get(0).getId());
         System.out.println("=======update되었습니다.======");
         System.out.println(db.todoDao().getDate(et_exercise_name.getText().toString()));
 
@@ -194,7 +204,7 @@ public class ProfileActivity  extends AppCompatActivity {
     }
 
     public void btn_plus_click(View view) {
-        if (count_check>=Integer.parseInt(et_exertcise_count.getText().toString())){
+        if (count_check >= Integer.parseInt(et_exertcise_count.getText().toString())) {
             count_check = Integer.parseInt(et_exertcise_count.getText().toString());
         }
         if (progr <= 100) {

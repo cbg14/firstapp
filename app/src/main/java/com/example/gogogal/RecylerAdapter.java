@@ -1,6 +1,8 @@
 package com.example.gogogal;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
@@ -29,8 +31,10 @@ public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.CustomVi
 
     public RecylerAdapter(ArrayList<RecyclerData> arrayList, Context context) {
         this.context = context;
+        System.out.println(context+"=============");
         this.arrayList = arrayList;
     }
+
 
     @NonNull
     @Override
@@ -76,14 +80,33 @@ public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.CustomVi
             @Override
             public boolean onLongClick(View v) {
                 curName = holder.textView.getText().toString();
-                remove(holder.getAdapterPosition());
+                System.out.println("롱클릭감지=========");
+                AlertDialog.Builder ad = new AlertDialog.Builder(v.getRootView().getContext());
+                ad.setTitle("삭제");
+                ad.setMessage(curName+"를 삭제하시 겠습니까?");
+                ad.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        curName = holder.textView.getText().toString();
+                        remove(holder.getAdapterPosition());
+                    }
+                });
+                ad.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                ad.show();
                 return true;
             }
         });
     }
-    public void remove(int position) { //position 값이 리스트 순서대로 0부터 시작함 ex) 리스트개수가4면 0,1,2,3 맨위는 항상0
-        try{
 
+    public void remove(int position) { //position 값이 리스트 순서대로 0부터 시작함 ex) 리스트개수가4면 0,1,2,3 맨위는 항상0
+
+        try{
             System.out.println("==========REMOVE==============");
             db.todoDao().getDelete_title(curName);//클릭한 아이템 이름을 DB에서 삭제한다.
             System.out.println(curName+"DB에서 삭제");
