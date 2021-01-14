@@ -26,6 +26,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -41,12 +42,17 @@ public class ProfileActivity extends AppCompatActivity {
     private AdView mAdView;
     private AppDatabase db;
     Toolbar toolbar;
+    int curday;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ring_probressbar);
+
+        //현재 날짜 구하기
+        Calendar calendar  =Calendar.getInstance();
+         curday = calendar.get(Calendar.DAY_OF_WEEK);
 
         //툴바 뒤로가기 만들기
         toolbar = findViewById(R.id.toolbar);
@@ -189,7 +195,9 @@ public class ProfileActivity extends AppCompatActivity {
             et_set_count.setText("0");
         }
         List<Todo> item = db.todoDao().getDate(plan_name);
-        db.todoDao().upDate(et_exercise_name.getText().toString(), Integer.valueOf(et_exertcise_count.getText().toString()), Integer.valueOf(et_set_count.getText().toString()), Integer.valueOf(text_check_count.getText().toString()), progr, item.get(0).getId());
+        //업데이트 이름,총 개수,세트수,체크수,퍼센트값,아이디,day
+        db.todoDao().upDate(et_exercise_name.getText().toString(), Integer.valueOf(et_exertcise_count.getText().toString()), Integer.valueOf(et_set_count.getText().toString()),
+                Integer.valueOf(text_check_count.getText().toString()), progr, item.get(0).getId(),curday);
         System.out.println("=======update되었습니다.======");
         System.out.println(db.todoDao().getDate(et_exercise_name.getText().toString()));
 

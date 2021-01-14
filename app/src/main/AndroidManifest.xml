@@ -14,9 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GoGogal">
-
-
-
+        <activity android:name=".day_info"></activity>
         <activity android:name=".calendar" /> <!-- 애드몹 메타 데이터 -->
         <!-- 애드몹 테스트 계정 -->
         <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->

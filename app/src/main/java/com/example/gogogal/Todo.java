@@ -13,6 +13,7 @@ public class Todo {
     private  int ex_set=0;
     private int  progr=0;
     private int count_check=0;
+    private int day;
 
     public int getProgr() {
         return progr;
@@ -31,12 +32,13 @@ public class Todo {
     }
 
     //생성자 아이템추가할떄 제목만 받았을때 쓰는 생성자
-    public Todo(String title, int ex_all_count, int ex_set,int progr,int count_check) {
+    public Todo(String title, int ex_all_count, int ex_set,int progr,int count_check,int day) {
         this.title = title;
         this.ex_all_count = ex_all_count;
         this.ex_set =ex_set;
         this.progr = progr;
         this.count_check = count_check;
+        this.day =day;
     }
 
 
@@ -73,6 +75,14 @@ public class Todo {
     }
 
 
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
+    }
+
     @Override
     public String toString() {
         return "Todo{" +
@@ -82,6 +92,7 @@ public class Todo {
                 ", ex_set=" + ex_set +
                 ", progr=" + progr +
                 ", count_check=" + count_check +
+                ", day=" + day +
                 '}';
     }
 }

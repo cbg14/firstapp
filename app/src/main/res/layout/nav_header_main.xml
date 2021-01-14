@@ -23,7 +23,7 @@
         <ProgressBar
             android:id="@+id/progress_bar1"
             android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:indeterminateOnly="false"
             android:progressDrawable="@drawable/circle"
@@ -42,12 +42,11 @@
         <ProgressBar
             android:id="@+id/progress_bar3"
             android:layout_width="100dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_height="100dp"
             android:indeterminateOnly="false"
             android:progressDrawable="@drawable/circle"
-            tools:progress="20">
-        </ProgressBar>
+            tools:progress="20"></ProgressBar>
     </LinearLayout>
 
     <LinearLayout

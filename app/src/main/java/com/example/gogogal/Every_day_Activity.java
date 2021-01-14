@@ -20,6 +20,7 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class Every_day_Activity extends AppCompatActivity implements View.OnClickListener{
@@ -37,6 +38,8 @@ public class Every_day_Activity extends AppCompatActivity implements View.OnClic
     private  AppDatabase db;
     private TextView tv_progs, text_done;
     int progs=0;
+    int cur_day;
+
 
     private  Context context;
     String name ="";
@@ -46,6 +49,10 @@ public class Every_day_Activity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_every_day_);
+
+        //현재 날짜 구하기
+        Calendar calendar  =Calendar.getInstance();
+         cur_day = calendar.get(Calendar.DAY_OF_WEEK); // 1=일 2=월 3=화 4=수 5=목 6=금 7=토
 
         //룸 DB 사용해보기
         //데이터 베이스 객체 생성
@@ -120,7 +127,7 @@ public class Every_day_Activity extends AppCompatActivity implements View.OnClic
                       RecyclerData recyclerData = new RecyclerData(plan_name,0);
                       arrayList.add(recyclerData);
                         System.out.println("========Evert_Day_Activity===========");
-                        db.todoDao().insert(new Todo(plan_name,0,0,0,0));
+                        db.todoDao().insert(new Todo(plan_name,0,0,0,0,cur_day));
                         System.out.println(db.todoDao().getAll().toString());
                       recylerAdapter.notifyDataSetChanged();
 
