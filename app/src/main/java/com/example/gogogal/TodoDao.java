@@ -25,14 +25,18 @@ public interface TodoDao {
     @Query("SELECT * FROM Todo WHERE title =:title")
     public List<Todo> getDate(String title);
 
-    @Query("DELETE FROM Todo WHERE title=:title")
-    public int getDelete_title(String title);
+    //받은 제목과 날짜 대비해서 삭제
+    @Query("DELETE FROM Todo WHERE title=:title AND  day=:day")
+    public int getDelete_title(String title,int day);
     @Insert
     void insert(Todo todo);
 
     @Query("UPDATE Todo SET title=:title, count_check=:count_check, ex_all_count=:ex_all_count, ex_set=:ex_set, progr=:progr, day=:day  WHERE id=:id_value")
     public void upDate(String title,int ex_all_count,int ex_set,int count_check,int progr ,int id_value, int day);
 
+
+    @Update
+    void UPDATE(Todo todo);
     @Delete
     void delete(Todo todo);
 

@@ -1,18 +1,25 @@
 package com.example.gogogal;
 
 import android.app.AlarmManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.room.Room;
 
 import com.google.android.gms.ads.AdRequest;
@@ -20,6 +27,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.material.navigation.NavigationView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -34,11 +42,17 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar progressBar;
     TextView tv_percent, tv_check_count, tv_all_count;
     private AppDatabase db;
+    private  DayDatabase db_day;
+    private SumDatabase db_sum;
     TextView tv_day, tv_Mon, tv_Tue, tv_Wed, tv_Thu, tv_Fri, tv_Sat, tv_Sun;
     String shared = "0";
+    Toolbar toolbar;
 
-    //매일24시가되면 데이터 초기화
-    private AlarmManager alarmManager;
+    //네이게이션바
+    private DrawerLayout drawerLayout;
+    private Context context = this;
+
+
 
 
     @Override
@@ -46,14 +60,39 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start__view);
 
-        db = Room.databaseBuilder(this, AppDatabase.class, "todo-db").allowMainThreadQueries().build();
+        db=AppDatabase.getInstance(this);
+        db_day= DayDatabase.getInstance(this);
+        db_sum = SumDatabase.getInstance(this);
 
         bt_week_day = findViewById(R.id.bt_week_day);
         progressBar = findViewById(R.id.progress_bar);
         tv_percent = findViewById(R.id.text_progress);
         tv_check_count = findViewById(R.id.tv_check_count);
         tv_all_count = findViewById(R.id.tv_all_count);
+        //////////
+        drawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navigationView =findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                item.setChecked(true);
+                drawerLayout.closeDrawers();
+                int id = item.getItemId();
+                String title = item.getTitle().toString();
 
+                if(id == R.id.Todo_calendar){
+                    Intent intent= new Intent(getApplicationContext(),calendar.class);
+                    startActivity(intent);
+                }
+                if(id == R.id.Todo_SUM) {
+                    Intent intent  = new Intent(getApplicationContext(),Todo_Sum.class);
+                    startActivity(intent);
+                }
+
+                return true;
+            }
+        });
+        /////////
 
         //버튼 각요일 //텍스트
 
@@ -76,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         List<Todo> item = db.todoDao().getAll();
+        List<Todo_Day> item2= db_day.todo_dayDao().getAll();
+        List<Sum> item_sum =db_sum.sumDao().getAll();
         tv_all_count.setText(String.valueOf(item.size()));
         int check = 0, progr = 0;
         for (int i = 0; i < item.size(); i++) {
@@ -88,11 +129,13 @@ public class MainActivity extends AppCompatActivity {
         if (progr > 100) {
             progr = 100;
         }
+
+
+
         tv_check_count.setText(String.valueOf(check));
         progressBar.setProgress(progr);
 
         tv_percent.setText(String.valueOf(progr) + "%");
-
 
         bt_week_day.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +144,66 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        //일주일 버튼 클릭시 각 인텐트 설정
+        bt_Sun.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(getApplicationContext(),Day_info.class);
+                intent.putExtra("Day",1);
+                startActivity(intent);
+            }
+        });
+        bt_Mon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(getApplicationContext(),Day_info.class);
+                intent.putExtra("Day",2);
+                startActivity(intent);
+            }
+        });
+        bt_Tue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(getApplicationContext(),Day_info.class);
+                intent.putExtra("Day",3);
+                startActivity(intent);
+            }
+        });
+        bt_Wed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(getApplicationContext(),Day_info.class);
+                intent.putExtra("Day",4);
+                startActivity(intent);
+            }
+        });
+        bt_Thu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(getApplicationContext(),Day_info.class);
+                intent.putExtra("Day",5);
+                startActivity(intent);
+            }
+        });
+        bt_Fri.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(getApplicationContext(),Day_info.class);
+                intent.putExtra("Day",6);
+                startActivity(intent);
+            }
+        });
+        bt_Sat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(getApplicationContext(),Day_info.class);
+                intent.putExtra("Day",7);
+                startActivity(intent);
+            }
+        });
+
+
         //광고
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
@@ -113,10 +216,9 @@ public class MainActivity extends AppCompatActivity {
 
         //현재 날짜 구하기
         Calendar calendar = Calendar.getInstance();
-
         int dayOfweek = calendar.get(Calendar.DAY_OF_WEEK); // 1=일 2=월 3=화 4=수 5=목 6=금 7=토
         //요일 임이로test
-        // int dayOfweek = 1;
+        // dayOfweek = 1;
 
         if (item.size() > 0) {
             System.out.println("========dakofweek값:" + dayOfweek + "/ last_Day값:" + item.get(0).getDay());
@@ -136,15 +238,29 @@ public class MainActivity extends AppCompatActivity {
                 // 7.int day)
                 //progr값이랑 count_check값을 0으로 바꿔주고 day값을 dayofweek값으로 변경해준다.
                 System.out.println("============업데이트전================");
-                System.out.println(db.todoDao().getAll().toString());
+                System.out.println("==="+db.todoDao().getAll().toString());
+                System.out.println("===업데이트하기전 전에 값으로 통계 더하기===");
                 for (int i = 0; i < item.size(); i++) {
+                    for(int a=0; a<item_sum.size(); a++){
+                        //만약 통계에 있는 이름이 있을시 초기화 전에 데이터를 합친다.
+                        if(item_sum.get(a).getTitle().equals(item.get(i).getTitle())){
+                            db_sum.sumDao().upDate(item_sum.get(a).getTitle(),(item_sum.get(a).getSum()+item.get(i).getCount_check()),item_sum.get(a).getId());
+                        }
+                    }
                     db.todoDao().upDate(item.get(i).getTitle(), item.get(i).getEx_all_count(), item.get(i).getEx_set(), 0, 0, item.get(i).getId(), dayOfweek);
+                    db_day.todo_dayDao().insert(new Todo_Day(item.get(i).getTitle(),0,dayOfweek));
                 }
+
                 System.out.println("============업데이트후==========");
-                System.out.println(db.todoDao().getAll().toString());
+                System.out.println("==="+db.todoDao().getAll().toString());
+                System.out.println("==="+db_day.todo_dayDao().getAll().toString());
+                System.out.println("==="+db_sum.sumDao().getAll().toString());
             }
         }
-
+        System.out.println("===현제 Todo데이터 리스트===");
+        System.out.println("==="+db.todoDao().getAll().toString());
+        System.out.println("===현제 Todo_Day데이터 리스트===");
+        System.out.println("==="+db_day.todo_dayDao().getAll().toString());
         //지난 요일에 값 넣기
         SharedPreferences sharedPreferences = getSharedPreferences(shared, 0);
         String Mon_value = sharedPreferences.getString("Mon", "");
@@ -155,8 +271,8 @@ public class MainActivity extends AppCompatActivity {
         String Sat_value = sharedPreferences.getString("Sat", "");
         String Sun_value = sharedPreferences.getString("Sun", "");
 
+        //시작일인 일요일이 되면 초기화 하고 시작
         if (dayOfweek == 1) {
-            //일요일이 되면 초기화 하고 시작
             SharedPreferences sharedPreferences1 = getSharedPreferences(shared, 0);
             SharedPreferences.Editor editor = sharedPreferences1.edit();
             String re_Mon_value = "0%";
@@ -175,6 +291,15 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("Sun", re_Sun_value);
             System.out.println("========SharedPreferences일주일이 끝날때  각 요일 퍼센트 리셋후 확인========");
             System.out.println("====Mon=" + re_Mon_value + "/ Tue=" + re_Tue_value + "/Wed=" + re_Wed_value + "/Thu=" + re_Thu_value + "/FRi=" + re_Fri_value + "/SAT=" + re_Sat_value + "/ SUN=" + re_Sun_value + "========");
+            tv_Sun.setText(re_Sun_value);
+            tv_Mon.setText(re_Mon_value);
+            tv_Tue.setText(re_Tue_value);
+            tv_Wed.setText(re_Wed_value);
+            tv_Thu.setText(re_Thu_value);
+            tv_Fri.setText(re_Fri_value);
+            tv_Sat.setText(re_Sat_value);
+            tv_Sun.setText(re_Sun_value);
+            db_day.todo_dayDao().deleteAll();
             editor.commit();
         } else {
             System.out.println("====Mon=" + Mon_value + "/ Tue=" + Tue_value + "/Wed=" + Wed_value + "/Thu=" + Thu_value + "/FRi=" + Fri_value + "/SAT=" + Sat_value + "/ SUN=" + Sun_value + "========");
@@ -214,9 +339,9 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 tv_Sun.setText(Sun_value);
             }
-
         }
 
+        //해당하는 요일에 실행되도록
         switch (dayOfweek) {
             case 1:
                 tv_day.setText("일요일"); //제목
@@ -260,6 +385,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        System.out.println("=====종료됩니다.=====");
         SharedPreferences sharedPreferences = getSharedPreferences(shared, 0);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         String Mon_value = tv_Mon.getText().toString();
@@ -279,7 +406,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("========SharedPreferences종료시점 각 요일 퍼센트 확인========");
         System.out.println("====Mon=" + Mon_value + "/ Tue=" + Tue_value + "/Wed=" + Wed_value + "/Thu=" + Thu_value + "/FRi=" + Fri_value + "/SAT=" + Sat_value + "/ SUN=" + Sun_value + "========");
         editor.commit();
-        System.exit(0);// 현재 액티비티를 종료한다
+
 
     }
 
@@ -312,7 +439,7 @@ public class MainActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         int dayOfweek = calendar.get(Calendar.DAY_OF_WEEK);
         //날짜 임이로test 확인후 삭제
-        //int dayOfweek = 1;
+        //dayOfweek =1;
         switch (dayOfweek) {
             case 1:
                 //일

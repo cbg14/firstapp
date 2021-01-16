@@ -1,6 +1,6 @@
 package com.example.gogogal;
 
-import android.content.SharedPreferences;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,15 +10,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.ActionBar;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.room.Room;
-import androidx.room.RoomDatabase;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -26,6 +26,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -41,18 +42,18 @@ public class ProfileActivity extends AppCompatActivity {
     String ex_count = "0";
     private AdView mAdView;
     private AppDatabase db;
+    private DayDatabase db_day;
+    private SumDatabase db_sum;
     Toolbar toolbar;
     int curday;
+    String id;
+    private ArrayList<Todo> arrayList;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ring_probressbar);
-
-        //현재 날짜 구하기
-        Calendar calendar  =Calendar.getInstance();
-         curday = calendar.get(Calendar.DAY_OF_WEEK);
 
         //툴바 뒤로가기 만들기
         toolbar = findViewById(R.id.toolbar);
@@ -64,6 +65,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onInitializationComplete(InitializationStatus initializationStatus) {
             }
         });
+
 
         mAdView = findViewById(R.id.adView1);
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -80,17 +82,19 @@ public class ProfileActivity extends AppCompatActivity {
         bt_dsc = findViewById(R.id.button_dsc);
         bt_clear = findViewById(R.id.bt_clear);
 
-
         //db = Room.databaseBuilder(this,AppDatabase.class,"todo-db").allowMainThreadQueries().build();
-        db = Room.databaseBuilder(this, AppDatabase.class, "todo-db").allowMainThreadQueries().build();
+        db = AppDatabase.getInstance(this);
+        db_day = DayDatabase.getInstance(this);
+        db_sum = SumDatabase.getInstance(this);
 
-
+        //recycleAdaper에서 인테트하기전에 값 넘긴거 받는 코딩
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             plan_name = extras.getString("plan_name");
+            id = extras.getString("id");
         }
 
-        System.out.println("====파일ProfileActivtity=====값넘어오는지 확인:" + plan_name);
+        System.out.println("====파일ProfileActivtity=====값넘어오는지 확인:" + plan_name + "/ID=" + id);
 
 
         List<Todo> item = db.todoDao().getDate(plan_name);
@@ -128,58 +132,37 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
         /*텍스트 값 변경 감지 운동갯수나 세트수가 변경되면 차트 초기화시키기*/
-        et_exertcise_count.addTextChangedListener(new TextWatcher() {
+        et_exertcise_count.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            //텍스트가 변경될떄 마다 호출된다.
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(et_exertcise_count.getText().toString().equals("")){
-                    et_exertcise_count.setText("0");
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    et_exertcise_count.setText("");
+                } else {
+                    et_exertcise_count.getText();
                 }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                progressBar.setProgress(0);
-                progressText.setText("0%");
-                progr = 0;
-                text_all_count.setText(et_exertcise_count.getText());
-                text_check_count.setText("0");
-                count_check = 0;
 
             }
         });
-        et_set_count.addTextChangedListener(new TextWatcher() {
+        et_set_count.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(et_set_count.getText().toString().equals("")){
-                    et_set_count.setText("0");
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    et_set_count.setText("");
+                } else {
+                    et_set_count.getText();
                 }
-            }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                progressBar.setProgress(0);
-                progressText.setText("0%");
-                progr = 0;
-                text_all_count.setText(et_exertcise_count.getText());
-                text_check_count.setText("0");
-                count_check = 0;
             }
         });
+        et_exertcise_count.addTextChangedListener(textWatcher);
+        et_set_count.addTextChangedListener(textWatcher);
 
 
+        //현재 날짜 구하기
+        Calendar calendar = Calendar.getInstance();
+        curday = calendar.get(Calendar.DAY_OF_WEEK);
+        //날짜 임의로 변경 TEST
+        //curday=1;
     }
 
 
@@ -187,19 +170,39 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        //public List<Todo>  upDate(String title,///int ex_all_count,///int ex_set,///int count_check,///int progr,///int id_value);
-        if(et_exertcise_count.getText().toString().equals("")){
+        if (et_exertcise_count.getText().toString() == "") {
             et_exertcise_count.setText("0");
         }
-        if (et_set_count.getText().toString().equals("")){
+        if (et_set_count.getText().toString() == "") {
+            et_set_count.setText("0");
+        }
+        //public List<Todo>  upDate(String title,///int ex_all_count,///int ex_set,///int count_check,///int progr,///int id_value);
+        if (et_exertcise_count.getText().toString().equals("")) {
+            et_exertcise_count.setText("0");
+        }
+        if (et_set_count.getText().toString().equals("")) {
             et_set_count.setText("0");
         }
         List<Todo> item = db.todoDao().getDate(plan_name);
+        List<Sum> item3 = db_sum.sumDao().getDate(plan_name);
+
         //업데이트 이름,총 개수,세트수,체크수,퍼센트값,아이디,day
         db.todoDao().upDate(et_exercise_name.getText().toString(), Integer.valueOf(et_exertcise_count.getText().toString()), Integer.valueOf(et_set_count.getText().toString()),
-                Integer.valueOf(text_check_count.getText().toString()), progr, item.get(0).getId(),curday);
-        System.out.println("=======update되었습니다.======");
-        System.out.println(db.todoDao().getDate(et_exercise_name.getText().toString()));
+                Integer.valueOf(text_check_count.getText().toString()), progr, item.get(0).getId(), curday);
+
+        System.out.println("======Todo db가update되었습니다.======");
+        System.out.println("===" + db.todoDao().getDate(et_exercise_name.getText().toString()));
+        List<Todo_Day> item2 = db_day.todo_dayDao().getDate(plan_name);
+        if (item2.size() > 0) {
+            System.out.println("===item2 getID=" + item2.get(item2.size() - 1).getId());
+            System.out.println("===item2 에서 가져온 값=" + item2.toString());
+            db_day.todo_dayDao().UPDATE(et_exercise_name.getText().toString(), progr, item2.get(item2.size() - 1).getId());
+        }
+
+
+        System.out.println("======Todo db_Day가update되었습니다.======");
+        System.out.println("===" + db_day.todo_dayDao().getDate(et_exercise_name.getText().toString()));
+        System.out.println("===SUM update =>" + db_sum.sumDao().getDate(et_exercise_name.getText().toString()));
 
     }
 
@@ -258,4 +261,32 @@ public class ProfileActivity extends AppCompatActivity {
 
         }
     }
+
+    public void bt_set_info(View v) {
+        Toast.makeText(this.getApplicationContext(), "세트는 개수는 한번에 완료할지 분활해서 완료할지 정한느거랍니당~ \n ex)개수 100 세트 10은 1세트+시 10개  \nex2)개수100 세트1은 1세트시 100 \n한번에 완료하고싶으면 세트0,1을 주며됩니다.", Toast.LENGTH_LONG).show();
+    }
+
+    private final TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+            progressBar.setProgress(0);
+            progressText.setText("0%");
+            progr = 0;
+            text_all_count.setText(et_exertcise_count.getText());
+            text_check_count.setText("0");
+            count_check = 0;
+        }
+    };
 }

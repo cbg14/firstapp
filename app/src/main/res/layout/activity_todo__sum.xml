@@ -4,40 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Start_View">
-
+    tools:context=".Todo_Sum">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar1"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="#A4AEED"
-        app:layout_constraintTop_toTopOf="parent">
-    </androidx.appcompat.widget.Toolbar>
+        app:layout_anchor="@+id/appBarLayout"
+        app:layout_anchorGravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/Theme.GoGogal.PopupOverlay"></androidx.appcompat.widget.Toolbar>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:background="#E9CFCFCF"
-        android:id="@+id/recycler_view"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:scrollbarSize="5dp"
-        android:scrollbars="vertical"
+        app:cardBackgroundColor="#837C7C"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp"
+        app:cardUseCompatPadding="true"
         app:layout_constraintBottom_toTopOf="@+id/adView2"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar1"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="0dp">
-    </androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/todo_sum_rv">
+        </androidx.recyclerview.widget.RecyclerView>
 
 
+    </androidx.cardview.widget.CardView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/item_add"
-        android:layout_width="wrap_content"
-        android:layout_height="109dp"
-        app:srcCompat="@android:drawable/ic_input_add"
-        android:layout_margin="@dimen/fab_margin"
-        app:layout_constraintBottom_toTopOf="@+id/adView2"
-        app:layout_constraintRight_toRightOf="parent"/>
+
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView2"
@@ -49,8 +46,6 @@
         app:adSize="SMART_BANNER"
         app:adUnitId="ca-app-pub-3940256099942544/6300978111"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints">
-    </com.google.android.gms.ads.AdView>
-
+        tools:ignore="MissingConstraints"></com.google.android.gms.ads.AdView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

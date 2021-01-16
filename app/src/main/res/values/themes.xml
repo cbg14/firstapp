@@ -6,10 +6,10 @@
 <!--        <item name="colorOnPrimary">@color/white</item>-->
 <!--        &lt;!&ndash; Secondary brand color. &ndash;&gt;-->
 <!--        <item name="colorSecondary">@color/white</item>-->
-<!--        <item name="colorSecondaryVariant">@color/white</item>-->
+        <item name="colorSecondaryVariant">#000000</item>
 <!--        <item name="colorOnSecondary">@color/purple_500</item>-->
 <!--        &lt;!&ndash; Status bar color. &ndash;&gt;-->
-<!--        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>-->
+        <item name="android:statusBarColor" tools:targetApi="l">#000000</item>
 <!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
     </style>
 

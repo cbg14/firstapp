@@ -20,18 +20,25 @@ import androidx.room.Room;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.CustomViewHolder> {
 
     private  ArrayList<RecyclerData> arrayList;
     private Context context;
     private  AppDatabase db;
+    private  DayDatabase db_day;
     String curName;
     int curpercent;
+    int curday;
+    int id;
+    //현재 날짜 구하기
+    Calendar calendar  =Calendar.getInstance();
+
 
     public RecylerAdapter(ArrayList<RecyclerData> arrayList, Context context) {
         this.context = context;
-        System.out.println(context+"=============");
         this.arrayList = arrayList;
     }
 
@@ -42,7 +49,10 @@ public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.CustomVi
     public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list,parent,false);
         CustomViewHolder holder = new CustomViewHolder(view);
-        db = Room.databaseBuilder(parent.getContext(),AppDatabase.class,"todo-db").allowMainThreadQueries().build();
+        db= AppDatabase.getInstance(parent.getContext());
+        db_day= DayDatabase.getInstance(parent.getContext());
+        curday = calendar.get(Calendar.DAY_OF_WEEK);
+        //curday=1;
         return holder;
     }
 
@@ -63,14 +73,16 @@ public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.CustomVi
             public void onClick(View v) {
                  curName = holder.textView.getText().toString();
 
-
                // Toast.makeText(v.getContext(),curName,Toast.LENGTH_SHORT).show();
                 //아이템 클릭시 인테트 해보기
                  context = v.getContext();
                 Intent intent =new Intent(v.getContext(),ProfileActivity.class);
                 //화면넘기면서 값 넘기기
+                List<Todo> item = db.todoDao().getDate(curName);
+                System.out.println("===아이템 클릭"+item.toString());
                 intent.putExtra("plan_name",curName);
-                System.out.println("==RecycleAdapter==값을 보내기전 잘 담기는지 curname/curpercent 확인:"+curName+"/"+curpercent);
+                //intent.putExtra("id",String.valueOf(item.get(item.size()-1).getId()));
+                System.out.println("==RecycleAdapter==값을 보내기전 잘 담기는지 curname/id값 확인:"+curName+"/"+id);
                 context.startActivity(intent);
 
 
@@ -105,12 +117,18 @@ public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.CustomVi
     }
 
     public void remove(int position) { //position 값이 리스트 순서대로 0부터 시작함 ex) 리스트개수가4면 0,1,2,3 맨위는 항상0
+        List<Todo> item = db.todoDao().getDate(curName);
+        List<Todo_Day> item2 = db_day.todo_dayDao().getDate(curName);
 
         try{
             System.out.println("==========REMOVE==============");
-            db.todoDao().getDelete_title(curName);//클릭한 아이템 이름을 DB에서 삭제한다.
-            System.out.println(curName+"DB에서 삭제");
+            System.out.println("===삭제할 제목:"+curName+" 그리고 curday:"+curday);
+            db.todoDao().getDelete_title(curName,curday);//클릭한 아이템 이름을 DB에서 삭제한다.
+            db_day.todo_dayDao().getDelete_title(curName,curday);
+            System.out.println(curName+"===Todo DB에서 삭제");
             System.out.println(db.todoDao().getAll().toString());
+            System.out.println(curName+"===Todo_Day DB에서 삭제");
+            System.out.println(db_day.todo_dayDao().getAll().toString());
             arrayList.remove(position);
             notifyItemRemoved(position);
         }catch (IndexOutOfBoundsException ex){

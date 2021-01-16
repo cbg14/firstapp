@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.gogogal">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,19 +15,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GoGogal">
-        <activity android:name=".day_info"></activity>
-        <activity android:name=".calendar" /> <!-- 애드몹 메타 데이터 -->
+        <activity
+            android:name=".calendar"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".Day_info"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".Todo_Sum"
+            android:parentActivityName=".MainActivity"/>
+
+        <!-- 애드몹 메타 데이터 -->
         <!-- 애드몹 테스트 계정 -->
         <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713" />
 
-        <activity android:name=".Every_day_Activity" />
         <activity
-            android:name=".Start_View"
-            android:label="@string/title_activity_start__view"
-            android:theme="@style/Theme.GoGogal.NoActionBar" />
+            android:name=".Every_day_Activity"
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,7 +41,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SubActivity" />
         <activity
             android:name=".ProfileActivity"
             android:parentActivityName=".Every_day_Activity" />
