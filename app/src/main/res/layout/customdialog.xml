@@ -2,41 +2,43 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
+
 
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:background="?android:attr/colorPressedHighlight"
         android:gravity="center"
-        android:text="오늘 할일"
-        android:textSize="20dp"
-        android:background="?android:attr/colorPressedHighlight">
-    </TextView>
+        android:text="@string/tv_day_goal_add"
+        android:textSize="20dp"></TextView>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1.5dp"
-        android:background="#000000"
-        />
+        android:background="#000000" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <EditText
+            android:id="@+id/et_plan_name"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:textSize="25dp"
-            android:inputType="text"
-            android:id="@+id/et_plan_name"
             android:hint=""
-            />
+            android:inputType="text"
+            android:textSize="25dp" />
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1.5dp"
-        android:background="#000000"
-        />
+        android:background="#000000" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -51,7 +53,7 @@
 
             android:background="#ffffff"
             android:gravity="center"
-            android:text="취소"
+            android:text="@string/bt_dialog_No"
             android:textColor="#000000"
             android:textSize="16dp"
             app:backgroundTint="#ffffff" />
@@ -60,6 +62,7 @@
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="#000000" />
+
         <Button
             android:id="@+id/bt_ok"
             android:layout_width="match_parent"
@@ -68,15 +71,16 @@
             android:layout_weight="1"
             android:background="#ffffff"
             android:gravity="center"
-            android:text="확인"
+            android:text="@string/bt_dialog_Yes"
             android:textColor="#000000"
             android:textSize="16dp"
             app:backgroundTint="#FFFFFF" />
 
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1.5dp"
-        android:background="#000000"/>
+        android:background="#000000" />
 
 </LinearLayout>

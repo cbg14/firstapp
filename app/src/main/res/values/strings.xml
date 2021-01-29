@@ -8,12 +8,35 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">매일 달성하기</string>
-    <string name="menu_gallery">장기 목표</string>
-    <string name="menu_slideshow">달력</string>
+
+    <string name="menu_setting">통계</string>
+    <string name="menu_calendar">달력</string>
 
 
-    <!--애드몹-->
+    <!--일주일 리스트    -->
+    <string name="day_sun">일</string>
+    <string name="day_mon">월</string>
+    <string name="day_tue">화</string>
+    <string name="day_wed">수</string>
+    <string name="day_thu">목</string>
+    <string name="day_fri">금</string>
+    <string name="day_sat">토</string>
+
+   <string name="bt_day_goal_setting">매일 하루 목표 설정</string>
+    <string name="tv_day_goal_add">오늘 할일</string>
+    <string name="bt_dialog_Yes">확인</string>
+    <string name="bt_dialog_No">취소</string>
+    <string name="bt_one_set_plu">1세트+</string>
+    <string name="bt_one_set_dsc">1세트-</string>
+    
+    <string name="tv_name">제목</string>
+    <string name="tv_count">개수</string>
+    <string name="tv_set">세트</string>
+    <string name="tv_1set">1세트:</string>
+    <string name="bt_complete">완료</string>
+    <string name="bt_clear">초기화</string>
+
+
 
 
 </resources>

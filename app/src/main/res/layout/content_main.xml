@@ -15,13 +15,6 @@
         android:layout_height="?attr/actionBarSize"
         android:background="#A4AEED"
         app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="20dp"
-            android:text="목표 달성" />
     </androidx.appcompat.widget.Toolbar>
 
     <ProgressBar
@@ -96,7 +89,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:padding="15dp"
-        android:text="매일 하루 목표 설정"
+        android:text="@string/bt_day_goal_setting"
         app:layout_constraintTop_toBottomOf="@id/progress_bar" />
 
 
@@ -138,7 +131,7 @@
                 android:backgroundTint="#AFA2A2"
                 android:insetBottom="0dp"
                 android:padding="2dp"
-                android:text="일" />
+                android:text="@string/day_sun" />
 
             <Button
                 android:id="@+id/bt_mon"
@@ -150,7 +143,7 @@
                 android:backgroundTint="#AFA2A2"
                 android:insetBottom="0dp"
                 android:padding="2dp"
-                android:text="월" />
+                android:text="@string/day_mon" />
 
             <Button
                 android:id="@+id/bt_tue"
@@ -162,7 +155,7 @@
                 android:backgroundTint="#AFA2A2"
                 android:insetBottom="0dp"
                 android:padding="2dp"
-                android:text="화" />
+                android:text="@string/day_tue" />
 
             <Button
                 android:id="@+id/bt_wed"
@@ -174,7 +167,7 @@
                 android:backgroundTint="#AFA2A2"
                 android:insetBottom="0dp"
                 android:padding="2dp"
-                android:text="수" />
+                android:text="@string/day_wed" />
 
             <Button
                 android:id="@+id/bt_thu"
@@ -186,7 +179,7 @@
                 android:backgroundTint="#AFA2A2"
                 android:insetBottom="0dp"
                 android:padding="2dp"
-                android:text="목" />
+                android:text="@string/day_thu" />
 
             <Button
                 android:id="@+id/bt_fri"
@@ -198,7 +191,7 @@
                 android:backgroundTint="#AFA2A2"
                 android:insetBottom="0dp"
                 android:padding="2dp"
-                android:text="금" />
+                android:text="@string/day_fri" />
 
             <Button
                 android:id="@+id/bt_sat"
@@ -210,7 +203,7 @@
                 android:backgroundTint="#AFA2A2"
                 android:insetBottom="0dp"
                 android:padding="2dp"
-                android:text="토" />
+                android:text="@string/day_sat" />
 
 
         </LinearLayout>
@@ -302,6 +295,8 @@
         </LinearLayout>
     </LinearLayout>
 
+<!--AdView 자동으로 포커스 가지면서 키패드 열리는 문제를
+속성에 android:descendantFocusability="blocksDescendants" 를 추가해줬더니 해결되었다.-->
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
@@ -311,7 +306,7 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="bottom"
         app:adSize="SMART_BANNER"
-        app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        app:adUnitId="ca-app-pub-6723060508831262/6824608666"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"></com.google.android.gms.ads.AdView>

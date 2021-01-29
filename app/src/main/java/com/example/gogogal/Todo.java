@@ -13,10 +13,37 @@ public class Todo {
     private  int ex_set=0;
     private int  progr=0;
     private int count_check=0;
-    private int day;
+    private int day; //그날짜에 어떤 요일인지 숫자로 표기
+    private int year; //년도
+    private int month;//월
+    private int day_date; //일
 
     public int getProgr() {
         return progr;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public int getDay_date() {
+        return day_date;
+    }
+
+    public void setDay_date(int day_date) {
+        this.day_date = day_date;
     }
 
     public void setProgr(int progr) {
@@ -31,16 +58,22 @@ public class Todo {
         this.count_check = count_check;
     }
 
+
+
     //생성자 아이템추가할떄 제목만 받았을때 쓰는 생성자
-    public Todo(String title, int ex_all_count, int ex_set,int progr,int count_check,int day) {
+
+
+    public Todo(String title, int ex_all_count, int ex_set, int progr, int count_check, int day, int year, int month, int day_date) {
         this.title = title;
         this.ex_all_count = ex_all_count;
-        this.ex_set =ex_set;
+        this.ex_set = ex_set;
         this.progr = progr;
         this.count_check = count_check;
-        this.day =day;
+        this.day = day;
+        this.year = year;
+        this.month = month;
+        this.day_date = day_date;
     }
-
 
     public int getEx_all_count() {
         return ex_all_count;
@@ -93,6 +126,9 @@ public class Todo {
                 ", progr=" + progr +
                 ", count_check=" + count_check +
                 ", day=" + day +
+                ", year=" + year +
+                ", month=" + month +
+                ", day_date=" + day_date +
                 '}';
     }
 }

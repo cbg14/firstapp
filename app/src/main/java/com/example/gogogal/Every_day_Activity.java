@@ -40,8 +40,7 @@ public class Every_day_Activity extends AppCompatActivity implements View.OnClic
     private TextView tv_progs, text_done;
     Toolbar toolbar;
     int progs=0;
-    int cur_day;
-    String id;
+    int cur_day,day_date,year,month;
 
 
     private  Context context;
@@ -84,7 +83,7 @@ public class Every_day_Activity extends AppCompatActivity implements View.OnClic
         recyclerView.setLayoutManager(linearLayoutManager);
 
         arrayList = new ArrayList<>();
-        recylerAdapter = new RecylerAdapter(arrayList, context);
+        recylerAdapter = new RecylerAdapter(arrayList, this);
         recyclerView.setAdapter(recylerAdapter);
 
         List<Todo> item = db.todoDao().getAll();
@@ -104,7 +103,15 @@ public class Every_day_Activity extends AppCompatActivity implements View.OnClic
         //현재 날짜 구하기
         Calendar calendar  =Calendar.getInstance();
         cur_day = calendar.get(Calendar.DAY_OF_WEEK); // 1=일 2=월 3=화 4=수 5=목 6=금 7=토
-        //cur_day =1;
+        year = calendar.get(Calendar.YEAR);
+        month =calendar.get(Calendar.MONTH)+1;
+        day_date=calendar.get(Calendar.DATE);
+        //임이로 날짜 테스트
+        //cur_day =5;
+        //day_date=27;
+
+        System.out.println("===현재날짜는"+year+"년"+month+"월"+day_date+"일");
+
         //아이템 추가버튼 클릭
         item_add = findViewById(R.id.item_add);
         item_add.setOnClickListener(this::onClick);
@@ -146,7 +153,7 @@ public class Every_day_Activity extends AppCompatActivity implements View.OnClic
                             Toast.makeText(getApplicationContext(),plan_name+"의 동일한 이름이 등록되어있습니다.",Toast.LENGTH_LONG).show();
                         }else {
                             System.out.println("===동일한 이름이 없으므로 새로 추가됩니다.");
-                            db.todoDao().insert(new Todo(plan_name,1,1,0,0,cur_day));
+                            db.todoDao().insert(new Todo(plan_name,1,1,0,0,cur_day,year,month,day_date));
                             db_day.todo_dayDao().insert(new Todo_Day(plan_name,0,cur_day));
                             arrayList.add(recyclerData);
                         }

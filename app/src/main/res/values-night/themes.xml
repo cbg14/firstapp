@@ -4,9 +4,9 @@
         <!-- Primary brand color. -->
 <!--        <item name="windowNoTitle">true</item>-->
 <!--        &lt;!&ndash;버튼 색상&ndash;&gt;-->
-        <item name="colorPrimary">#E1BFBF</item>
+<!--        <item name="colorPrimary">#E1BFBF</item>-->
 <!--        &lt;!&ndash;핸드폰 젤위 상단바 밧데리표시있는부분&ndash;&gt;-->
-        <item name="colorPrimaryVariant">#DF000000</item>
+<!--        <item name="colorPrimaryVariant">#DF000000</item>-->
 
 <!--        <item name="colorOnPrimary">@color/black</item>-->
 <!--        &lt;!&ndash; Secondary brand color. &ndash;&gt;-->

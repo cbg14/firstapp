@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Day Goal</string>
+    <string name="title_activity_start__view">Start_View</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+
+    <string name="menu_setting">Total</string>
+    <string name="menu_calendar">Calendar</string>
+
+    <!--일주일 리스트    -->
+    <string name="day_sun">S</string>
+    <string name="day_mon">M</string>
+    <string name="day_tue">T</string>
+    <string name="day_wed">w</string>
+    <string name="day_thu">T</string>
+    <string name="day_fri">F</string>
+    <string name="day_sat">S</string>
+
+    <string name="bt_day_goal_setting">Daily goal setting</string>
+    <string name="tv_day_goal_add">Daily goal</string>
+    <string name="bt_dialog_Yes">Yes</string>
+    <string name="bt_dialog_No">No</string>
+    <string name="bt_one_set_plu">1Set+</string>
+    <string name="bt_one_set_dsc">1Set-</string>
+
+    <string name="tv_name">Name</string>
+    <string name="tv_count">Count</string>
+    <string name="tv_set">set</string>
+    <string name="bt_complete">Complete</string>
+    <string name="tv_1set">1set:</string>
+    <string name="bt_clear">Clear</string>
+
+
+</resources>

@@ -52,7 +52,7 @@ public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.CustomVi
         db= AppDatabase.getInstance(parent.getContext());
         db_day= DayDatabase.getInstance(parent.getContext());
         curday = calendar.get(Calendar.DAY_OF_WEEK);
-        //curday=1;
+        //curday=5;
         return holder;
     }
 
