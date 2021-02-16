@@ -26,4 +26,7 @@ public interface Todo_dayDao {
 
     @Query("SELECT * FROM Todo_Day WHERE title =:title")
     public List<Todo_Day> getDate(String title);
+
+    @Query("SELECT COUNT(*) FROM Todo_Day WHERE day=:day")
+    public int getCount(int day);
 }

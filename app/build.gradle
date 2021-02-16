@@ -20,8 +20,8 @@ android {
         applicationId "com.zezecoavm.gogogal"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 5
-        versionName "1.5"
+        versionCode 7
+        versionName "1.7"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

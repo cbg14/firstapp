@@ -111,6 +111,10 @@ public class calendar extends AppCompatActivity {
             for (int i = 0; i < item2.size(); i++) {
                 dayData dayData = new dayData(item2.get(i).getTitle(), String.valueOf(item2.get(i).getProgr() + "%"));
                 if(Day == item2.get(i).getDay()){
+                    progr += Math.ceil((float)item2.get(i).getProgr()/db_day.todo_dayDao().getCount(Day));
+                    System.out.println("===item2.size:"+db_day.todo_dayDao().getCount(Day));
+                    System.out.println("===item2.get(i).getprogr:"+item2.get(i).getProgr());
+                    System.out.println("===progr:"+progr);
                     arrayList.add(dayData);
                 }
             }
@@ -141,8 +145,44 @@ public class calendar extends AppCompatActivity {
 
                 System.out.println("===클릭한 년월일 " + year + "년" + (month + 1) + "월" + dayOfMonth + "일");
                 System.out.println("==="+item1.toString());
+                if(language.equals("ko")){
+                    tv_percent.setText("진행률:0%");
+                }else{
+                    System.out.println("===progr:"+progr);
+                    tv_percent.setText("Progress:0%");
+                }
 
-                if (item1.size() > 0) {
+                if(year==year1 && (month+1) ==month1 && dayOfMonth ==day_date1 ){
+                    progr=0;
+                    if (item2.size() > 0) {
+                        for (int i = 0; i < item2.size(); i++) {
+                            dayData dayData = new dayData(item2.get(i).getTitle(), String.valueOf(item2.get(i).getProgr() + "%"));
+                            if(Day == item2.get(i).getDay()){
+                                progr += Math.ceil((float)item2.get(i).getProgr()/db_day.todo_dayDao().getCount(Day));
+                                System.out.println("===item2.size:"+db_day.todo_dayDao().getCount(Day));
+                                System.out.println("===item2.get(i).getprogr:"+item2.get(i).getProgr());
+                                System.out.println("===progr:"+progr);
+                                arrayList.add(dayData);
+                            }
+                        }
+                        calendar_adapter.notifyDataSetChanged();
+                        if(progr>100){
+                            progr=100;
+                        }
+                        if(language.equals("ko")){
+                            tv_percent.setText("진행률:"+String.valueOf(progr) + "%");
+                        }else{
+                            System.out.println("===progr:"+progr);
+                            String name = String.valueOf(progr);
+                            tv_percent.setText("Progress:"+name + "%");
+                        }
+                        progr=0;
+                    }
+
+                }
+                else if (item1.size() > 0) {
+                    click_progr=0;
+
                     for (int i = 0; i < item1.size(); i++) {
                         dayData recyclerData = new dayData(item1.get(i).getTitle(), String.valueOf(item1.get(i).getProgr()) + "%");
                         click_progr += Math.ceil((float)item1.get(i).getProgr() / item1.size());
@@ -150,19 +190,21 @@ public class calendar extends AppCompatActivity {
                     }
                     System.out.println("===진행률 값:"+(float)click_progr);
                     calendar_adapter.notifyDataSetChanged();
-                }
-                if(click_progr>100){
-                    click_progr=100;
-                }
-                if(language.equals("ko")){
-                    tv_calendar_date.setText(String.valueOf(year) + "년 " + String.valueOf(month + 1) + "월 " + String.valueOf(dayOfMonth) + "일");
-                    tv_percent.setText("진행률:"+String.valueOf(click_progr) + "%");
-                }else{
-                    tv_calendar_date.setText(String.valueOf(year) + ". " + String.valueOf(month + 1) + ". " + String.valueOf(dayOfMonth) + "");
-                    tv_percent.setText("Progress:"+String.valueOf(click_progr) + "%");
+                    if(click_progr>100){
+                        click_progr=100;
+                    }
+                    if(language.equals("ko")){
+                        tv_calendar_date.setText(String.valueOf(year) + "년 " + String.valueOf(month + 1) + "월 " + String.valueOf(dayOfMonth) + "일");
+                        tv_percent.setText("진행률:"+String.valueOf(click_progr) + "%");
+                    }else{
+                        tv_calendar_date.setText(String.valueOf(year) + ". " + String.valueOf(month + 1) + ". " + String.valueOf(dayOfMonth) + "");
+                        tv_percent.setText("Progress:"+String.valueOf(click_progr) + "%");
+                    }
+
                 }
 
-                click_progr=0;
+
+
             }
         });
 
