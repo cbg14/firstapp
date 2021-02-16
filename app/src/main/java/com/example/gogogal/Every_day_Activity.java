@@ -122,7 +122,6 @@ public class Every_day_Activity extends AppCompatActivity implements View.OnClic
     protected void onStart() {
         super.onStart();
         System.out.println("onstart실행");
-        System.out.println("===="+db.todoDao().getAll().toString());
         arrayList.clear();
         recylerAdapter.notifyDataSetChanged();
         List<Todo> item = db.todoDao().getAll();

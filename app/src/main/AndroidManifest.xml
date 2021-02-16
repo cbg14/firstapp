@@ -6,9 +6,6 @@
 
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -17,9 +14,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GoGogal">
-        <meta-data
-            android:name="com.google.android.actions"
-            android:resource="@xml/actions" />
 
         <activity
             android:name=".calendar"
@@ -29,9 +23,10 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".Todo_Sum"
-            android:parentActivityName=".MainActivity" /> <!-- 애드몹 메타 데이터 -->
-        <!-- 애드몹 테스트 계정 -->
+            android:parentActivityName=".MainActivity" />
+        <!-- 애드몹 메타 데이터 -->     <!-- 애드몹 테스트 계정 -->
         <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
+        <!--내 애드몹 아이디 ca-app-pub-6723060508831262~7483084216       -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-6723060508831262~7483084216" />

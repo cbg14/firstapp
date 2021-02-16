@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class SumAdapter extends RecyclerView.Adapter<SumAdapter.CustomViewHolder> {
 
@@ -22,11 +23,13 @@ public class SumAdapter extends RecyclerView.Adapter<SumAdapter.CustomViewHolder
     public SumAdapter(ArrayList<Sum> arrayList) {
         this.arrayList = arrayList;
     }
-
+    String language;
     @NonNull
     @Override
     //리스트뷰가 처음으로 생성될떄 생성주기
     public SumAdapter.CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Locale locale =parent.getResources().getConfiguration().locale;
+        language =locale.getLanguage();
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.day_item_list,parent,false);
         CustomViewHolder holder = new CustomViewHolder(view);
         db=SumDatabase.getInstance(parent.getContext());
@@ -43,25 +46,46 @@ public class SumAdapter extends RecyclerView.Adapter<SumAdapter.CustomViewHolder
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+
                 curName = holder.day_todo_name.getText().toString();
                 sum = Integer.valueOf(holder.day_todo_percent.getText().toString());
                 AlertDialog.Builder ad = new AlertDialog.Builder(v.getRootView().getContext());
-                ad.setTitle("삭제");
-                ad.setMessage(curName+"를 삭제하시 겠습니까?");
-                ad.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                if (language.equals("ko")){
+                    ad.setTitle("삭제");
+                    ad.setMessage(curName+"를 삭제하시 겠습니까?");
+                    ad.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-                        curName = holder.day_todo_name.getText().toString();
-                        remove(holder.getAdapterPosition());
-                    }
-                });
-                ad.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+                            curName = holder.day_todo_name.getText().toString();
+                            remove(holder.getAdapterPosition());
+                        }
+                    });
+                    ad.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                }else {
+                    ad.setTitle("Delete");
+                    ad.setMessage("Are you sure you want to delete "+curName);
+                    ad.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            curName = holder.day_todo_name.getText().toString();
+                            remove(holder.getAdapterPosition());
+                        }
+                    });
+                    ad.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                }
+
                 ad.show();
                 return true;
             }

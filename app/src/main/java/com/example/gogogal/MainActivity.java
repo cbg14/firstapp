@@ -30,6 +30,7 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.navigation.NavigationView;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
     int connect_date=0;//접속일
     int done=0; //목표달성
+
     //네이게이션바
     private DrawerLayout drawerLayout;
     private Context context = this;
@@ -89,10 +91,10 @@ public class MainActivity extends AppCompatActivity {
         db_calendar = Calendar_Database.getINSTANCE(this);
 
 
-        db_sum.sumDao().upDate("push up100",300,1);
-        db_sum.sumDao().upDate("Drink water10",100,2);
-        //db_calendar.todo_calendarDao().insert(new Todo_calendar(2021,1,28,"push up100",100));
-        db_calendar.todo_calendarDao().UPDATE("Drink water10",4);
+//        db_sum.sumDao().upDate("push up100",300,1);
+//        db_sum.sumDao().upDate("Drink water10",100,2);
+//        //db_calendar.todo_calendarDao().insert(new Todo_calendar(2021,1,28,"push up100",100));-
+//        db_calendar.todo_calendarDao().UPDATE("Drink water10",4);
 
         bt_week_day = findViewById(R.id.bt_week_day);
         progressBar = findViewById(R.id.progress_bar);
@@ -107,7 +109,17 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView =findViewById(R.id.nav_view);
 
-
+        //현재 날짜 구하기
+        Calendar calendar = Calendar.getInstance();
+        int dayOfweek = calendar.get(Calendar.DAY_OF_WEEK); // 1=일 2=월 3=화 4=수 5=목 6=금 7=토
+        System.out.println("===dayofweek값:"+dayOfweek);
+        int year = calendar.get(Calendar.YEAR); //년도 가져오기
+        int month = calendar.get(Calendar.MONTH)+1; //월 가져오기
+        int day = calendar.get(Calendar.DAY_OF_MONTH); // 일 가져오기
+        //요일 임이로test //날자변경 테스트
+        // dayOfweek = 1;
+        //day =27;
+        //지난 요일에 값 넣기 간단하게 값저장하기
 
 
         //네빙게이션바 아이템 클릭시 화면이동과 이벤트
@@ -122,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if(id == R.id.Todo_calendar){
                     Intent intent= new Intent(getApplicationContext(),calendar.class);
+                    intent.putExtra("Day",dayOfweek);
                     startActivity(intent);
                 }
                 if(id == R.id.Todo_SUM) {
@@ -134,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
         });
         View nav_header_view = navigationView.getHeaderView(0);
         nav_hearder = nav_header_view.findViewById(R.id.nav_hearder);
-
 
 
         /////////
@@ -173,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
         if (progr > 100) {
             progr = 100;
         }
-
 
         tv_check_count.setText(String.valueOf(check));
         progressBar.setProgress(progr);
@@ -248,17 +259,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        //현재 날짜 구하기
-        Calendar calendar = Calendar.getInstance();
-        int dayOfweek = calendar.get(Calendar.DAY_OF_WEEK); // 1=일 2=월 3=화 4=수 5=목 6=금 7=토
 
-        int year = calendar.get(Calendar.YEAR); //년도 가져오기
-        int month = calendar.get(Calendar.MONTH)+1; //월 가져오기
-        int day = calendar.get(Calendar.DAY_OF_MONTH); // 일 가져오기
-        //요일 임이로test //날자변경 테스트
-        //dayOfweek = 5;
-        //day =27;
-        //지난 요일에 값 넣기 간단하게 값저장하기
         SharedPreferences sharedPreferences = getSharedPreferences(shared, 0);
         String Mon_value = sharedPreferences.getString("Mon", "");
         String Tue_value = sharedPreferences.getString("Tue", "");
@@ -270,14 +271,88 @@ public class MainActivity extends AppCompatActivity {
         //connect_date = sharedPreferences.getInt("connect_date",0);
         done = sharedPreferences.getInt("done",0);
 
-        if (item.size() > 0) {
-            System.out.println("========dakofweek값:" + dayOfweek + "/ last_Day값:" + item.get(0).getDay());
+        //dayofweek(현재요일)가 저장된 날짜보다 뒷 난날짜면 초기화 시켜야한다.
+        //시작일인 일요일이 되면 초기화 하고 시작
+        System.out.println("===todo_day의 size:"+item2.size());
+        if(item2.size() != 0) {
+            if (dayOfweek<item2.get(0).getDay() || dayOfweek<item2.get(item2.size()-1).getDay() ) {
+                System.out.println("====일요일이거나/ 시작날보다 현재요일이 작으면 초기화");
+                db_day.todo_dayDao().deleteAll();
+                SharedPreferences sharedPreferences1 = getSharedPreferences(shared, 0);
+                SharedPreferences.Editor editor = sharedPreferences1.edit();
+                String re_Mon_value = "0%";
+                String re_Tue_value = "0%";
+                String re_Wed_value = "0%";
+                String re_Thu_value = "0%";
+                String re_Fri_value = "0%";
+                String re_Sat_value = "0%";
+                String re_Sun_value = "0%";
+                editor.putString("Mon", re_Mon_value);
+                editor.putString("Tue", re_Tue_value);
+                editor.putString("Wed", re_Wed_value);
+                editor.putString("Thu", re_Thu_value);
+                editor.putString("Fri", re_Fri_value);
+                editor.putString("Sat", re_Sat_value);
+                editor.putString("Sun", re_Sun_value);
+                System.out.println("========SharedPreferences일주일이 끝날때  각 요일 퍼센트 리셋후 확인========");
+                System.out.println("====Mon=" + re_Mon_value + "/ Tue=" + re_Tue_value + "/Wed=" + re_Wed_value + "/Thu=" + re_Thu_value + "/FRi=" + re_Fri_value + "/SAT=" + re_Sat_value + "/ SUN=" + re_Sun_value + "========");
+                tv_Sun.setText(re_Sun_value);
+                tv_Mon.setText(re_Mon_value);
+                tv_Tue.setText(re_Tue_value);
+                tv_Wed.setText(re_Wed_value);
+                tv_Thu.setText(re_Thu_value);
+                tv_Fri.setText(re_Fri_value);
+                tv_Sat.setText(re_Sat_value);
+                tv_Sun.setText(re_Sun_value);
+                editor.commit();
+            } else {
+                System.out.println("====Mon=" + Mon_value + "/ Tue=" + Tue_value + "/Wed=" + Wed_value + "/Thu=" + Thu_value + "/FRi=" + Fri_value + "/SAT=" + Sat_value + "/ SUN=" + Sun_value + "========");
+                if (Mon_value.equals("")) {
+                    tv_Mon.setText("0%");
+                } else {
+                    tv_Mon.setText(Mon_value);
+                }
+
+                if (Tue_value.equals("")) {
+                    tv_Tue.setText("0%");
+                } else {
+                    tv_Tue.setText(Tue_value);
+                }
+                if (Wed_value.equals("")) {
+                    tv_Wed.setText("0%");
+                } else {
+                    tv_Wed.setText(Wed_value);
+                }
+                if (Thu_value.equals("")) {
+                    tv_Thu.setText("0%");
+                } else {
+                    tv_Thu.setText(Thu_value);
+                }
+                if (Fri_value.equals("")) {
+                    tv_Fri.setText("0%");
+                } else {
+                    tv_Fri.setText(Fri_value);
+                }
+                if (Sat_value.equals("")) {
+                    tv_Sat.setText("0%");
+                } else {
+                    tv_Sat.setText(Sat_value);
+                }
+                if (Sun_value.equals("")) {
+                    tv_Sun.setText("0%");
+                } else {
+                    tv_Sun.setText(Sun_value);
+                }
+            }
         }
+
+//        if (item.size() > 0) {
+//            System.out.println("========dakofweek값:" + dayOfweek + "/ last_Day값:" + item.get(0).getDay());
+//        }
         //날이변경 되어 데이터 초기화 시키기
         if (item.size() > 0) {
 
             if (dayOfweek != item.get(0).getDay()) {
-                connect_date++;
                 System.out.println("Day가 바뀌여서 초기화 합니다.~~!");
                 //ex)Todo{id=1, title='one', ex_all_count=0, ex_set=0, progr=0, count_check=0, day=3}]
                 //업데이트 순서
@@ -291,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
                 //progr값이랑 count_check값을 0으로 바꿔주고 day값을 dayofweek값으로 변경해준다.
                 System.out.println("============업데이트전================");
                 System.out.println("==="+db.todoDao().getAll().toString());
-                System.out.println("===업데이트하기전 전에 값으로 통계 더하기===");
+                System.out.println("===업데이트하기전 전에 값으로 통계 더하기");
                 for (int i = 0; i < item.size(); i++) {
                     for(int a=0; a<item_sum.size(); a++){
                         //만약 통계에 있는 이름이 있을시 초기화 전에 데이터를 합친다.
@@ -320,21 +395,29 @@ public class MainActivity extends AppCompatActivity {
         //현재날짜-실행날자 계산
         Date d = new Date();
         if(calendarList.size()>0){
-            long time1 = (int)getTimeInMillis(calendarList.get(0).getYear(),calendarList.get(0).getMonth()-1,calendarList.get(0).getWeek_day())/86400000; //처음 등록된날짜
-            long time2 =  (int)calendar.getTimeInMillis()/86400000;//현재날짜 가져오기
-            //임의로 날짜 변경 테스트
-           // long test = getTimeInMillis(2021,0,27); //현재날짜  month 0부터 1월임
-            long result = (int)(time2-time1);
-           // long result = (int)(test-time1)/86400000;
-            System.out.println("===처음등록날짜:"+time1 +"/ 현재날짜 :"+time2);
-            System.out.println("===현재날짜-등록날자:"+ (time2-time1));
+            List<Todo_calendar> test123 = db_calendar.todo_calendarDao().select(1);
+            System.out.println("==="+test123.toString());
+            long time1 = getTimeInMillis(calendarList.get(0).getYear(),calendarList.get(0).getMonth()-1,calendarList.get(0).getWeek_day()); //처음 등록된날짜
+            long time2 = calendar.getTimeInMillis();//현재날짜 가져오기
+
             d.setTime(time1);
-            System.out.println("===time날짜는"+d);
+            System.out.println("===처음등록날짜:"+d);
             d.setTime(time2);
-            System.out.println("===time2날짜는"+d);
+            System.out.println("===현재날짜:"+d);
+            //임의로 날짜 변경 테스트
+            //long test = getTimeInMillis(2021,1,25); //현재날짜  month 0부터 1월임
+            //d.setTime(test);
+            //System.out.println("==="+d);
+            //System.out.println("===오늘날짜:"+test/86400000);
+
+            long result = (int)(time2/86400000) - (int)(time1/86400000);
+           // long result = (int)(test-time1)/86400000;
+           // System.out.println("===처음등록날짜:"+(int)(time1/86400000) +"/ 현재날짜 :"+(int)(time2/86400000));
+         //   System.out.println("===현재날짜-등록날자:"+ (time2-time1));
+            //18,652 18,666
             //long result = time2-test;
             //d.setTime(result);
-            System.out.println("===현재날짜 -실행날짜 계산 값은:"+(result));
+            System.out.println("===현재날짜 -실행날짜 계산 값은:"+((int)(result)));
             //네비 헤드바
             if(language.equals("ko")){
                 nav_hearder.setText(String.valueOf((int)result)+"일동안 "+String.valueOf(done)+" 목표달성");
@@ -361,75 +444,6 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("==="+db_day.todo_dayDao().getAll().toString());
 
 
-        //시작일인 일요일이 되면 초기화 하고 시작
-        if (dayOfweek == 1) {
-            SharedPreferences sharedPreferences1 = getSharedPreferences(shared, 0);
-            SharedPreferences.Editor editor = sharedPreferences1.edit();
-            String re_Mon_value = "0%";
-            String re_Tue_value = "0%";
-            String re_Wed_value = "0%";
-            String re_Thu_value = "0%";
-            String re_Fri_value = "0%";
-            String re_Sat_value = "0%";
-            String re_Sun_value = "0%";
-            editor.putString("Mon", re_Mon_value);
-            editor.putString("Tue", re_Tue_value);
-            editor.putString("Wed", re_Wed_value);
-            editor.putString("Thu", re_Thu_value);
-            editor.putString("Fri", re_Fri_value);
-            editor.putString("Sat", re_Sat_value);
-            editor.putString("Sun", re_Sun_value);
-            System.out.println("========SharedPreferences일주일이 끝날때  각 요일 퍼센트 리셋후 확인========");
-            System.out.println("====Mon=" + re_Mon_value + "/ Tue=" + re_Tue_value + "/Wed=" + re_Wed_value + "/Thu=" + re_Thu_value + "/FRi=" + re_Fri_value + "/SAT=" + re_Sat_value + "/ SUN=" + re_Sun_value + "========");
-            tv_Sun.setText(re_Sun_value);
-            tv_Mon.setText(re_Mon_value);
-            tv_Tue.setText(re_Tue_value);
-            tv_Wed.setText(re_Wed_value);
-            tv_Thu.setText(re_Thu_value);
-            tv_Fri.setText(re_Fri_value);
-            tv_Sat.setText(re_Sat_value);
-            tv_Sun.setText(re_Sun_value);
-            db_day.todo_dayDao().deleteAll();
-            editor.commit();
-        } else {
-            System.out.println("====Mon=" + Mon_value + "/ Tue=" + Tue_value + "/Wed=" + Wed_value + "/Thu=" + Thu_value + "/FRi=" + Fri_value + "/SAT=" + Sat_value + "/ SUN=" + Sun_value + "========");
-            if (Mon_value.equals("")) {
-                tv_Mon.setText("0%");
-            } else {
-                tv_Mon.setText(Mon_value);
-            }
-
-            if (Tue_value.equals("")) {
-                tv_Tue.setText("0%");
-            } else {
-                tv_Tue.setText(Tue_value);
-            }
-            if (Wed_value.equals("")) {
-                tv_Wed.setText("0%");
-            } else {
-                tv_Wed.setText(Wed_value);
-            }
-            if (Thu_value.equals("")) {
-                tv_Thu.setText("0%");
-            } else {
-                tv_Thu.setText(Thu_value);
-            }
-            if (Fri_value.equals("")) {
-                tv_Fri.setText("0%");
-            } else {
-                tv_Fri.setText(Fri_value);
-            }
-            if (Sat_value.equals("")) {
-                tv_Sat.setText("0%");
-            } else {
-                tv_Sat.setText(Sat_value);
-            }
-            if (Sun_value.equals("")) {
-                tv_Sun.setText("0%");
-            } else {
-                tv_Sun.setText(Sun_value);
-            }
-        }
 
         //해당하는 요일에 실행되도록
         switch (dayOfweek) {
@@ -563,7 +577,7 @@ public class MainActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         int dayOfweek = calendar.get(Calendar.DAY_OF_WEEK);
         //날짜 임이로test 확인후 삭제
-        //dayOfweek =5;
+        //dayOfweek =1;
 
         switch (dayOfweek) {
             case 1:
@@ -646,6 +660,8 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.openDrawer(GravityCompat.START);
         return true;
     }
+
+
 }
 
 

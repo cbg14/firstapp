@@ -22,6 +22,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.CustomViewHolder> {
 
@@ -35,6 +36,7 @@ public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.CustomVi
     int id;
     //현재 날짜 구하기
     Calendar calendar  =Calendar.getInstance();
+    String language;
 
 
     public RecylerAdapter(ArrayList<RecyclerData> arrayList, Context context) {
@@ -47,6 +49,8 @@ public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.CustomVi
     @Override
     //처음으로 생성될떄
     public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Locale locale =parent.getResources().getConfiguration().locale;
+         language =locale.getLanguage();
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list,parent,false);
         CustomViewHolder holder = new CustomViewHolder(view);
         db= AppDatabase.getInstance(parent.getContext());
@@ -59,6 +63,7 @@ public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.CustomVi
     @Override
     //뷰가 실제로 보여질때
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
+
         holder.textView.setText(arrayList.get(position).getPlan_name());
         holder.tv_progr.setText(String.valueOf(arrayList.get(position).getProgr())+"%");
         if(arrayList.get(position).getProgr()>=100){
@@ -91,25 +96,46 @@ public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.CustomVi
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+
                 curName = holder.textView.getText().toString();
                 System.out.println("롱클릭감지=========");
                 AlertDialog.Builder ad = new AlertDialog.Builder(v.getRootView().getContext());
-                ad.setTitle("삭제");
-                ad.setMessage(curName+"를 삭제하시 겠습니까?");
-                ad.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                if(language.equals("ko") ){
+                    ad.setTitle("삭제");
+                    ad.setMessage(curName+"를 삭제하시 겠습니까?");
+                    ad.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-                        curName = holder.textView.getText().toString();
-                        remove(holder.getAdapterPosition());
-                    }
-                });
-                ad.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+                            curName = holder.textView.getText().toString();
+                            remove(holder.getAdapterPosition());
+                        }
+                    });
+                    ad.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                }else {
+                    ad.setTitle("Delete");
+                    ad.setMessage("Are you sure you want to delete "+curName);
+                    ad.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            curName = holder.textView.getText().toString();
+                            remove(holder.getAdapterPosition());
+                        }
+                    });
+                    ad.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                }
+
                 ad.show();
                 return true;
             }

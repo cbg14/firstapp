@@ -18,6 +18,7 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class Day_info extends AppCompatActivity {
 
@@ -30,6 +31,7 @@ public class Day_info extends AppCompatActivity {
     private RecyclerView recyclerView;
     Toolbar toolbar;
     int Day;
+    String language;
 
     //룸
     private  DayDatabase db_day;
@@ -37,6 +39,10 @@ public class Day_info extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day_info);
+
+        //현재 시스템 언어가 어떤값인지 알아내는 코드
+        Locale locale =getResources().getConfiguration().locale;
+        language =locale.getLanguage();
 
         //툴바 뒤로가기 만들기 //매니패스트에 등록을 해줘야함  parentActivityName 돌아갈 부보 액티비티 정해줘야한다!!
         toolbar = findViewById(R.id.toolbar1);
@@ -77,6 +83,7 @@ public class Day_info extends AppCompatActivity {
 
 
         List<Todo_Day> item = db_day.todo_dayDao().getAll();
+        System.out.println("==="+item.toString());
         for(int i =0; i<item.size();i++) {
             dayData dayData = new dayData(item.get(i).getTitle(), String.valueOf(item.get(i).getProgr() + "%"));
             if(Day == item.get(i).getDay()){
@@ -84,27 +91,56 @@ public class Day_info extends AppCompatActivity {
             }
 
         }
+
             switch (Day) {
                 case 1:
-                    toolbar.setTitle("일요일 목표 리스트");
+                    if(language.equals("ko")) {
+                        toolbar.setTitle("일요일 목표 리스트");
+                    }else{
+                        toolbar.setTitle("Sunday goal list");
+                    }
                     break;
                 case 2:
-                    toolbar.setTitle("월요일 목표리스트");
+                    if(language.equals("ko")) {
+                        toolbar.setTitle("월요일 목표리스트");
+                    }else{
+                        toolbar.setTitle("Monday goal list");
+                    }
                     break;
                 case 3:
-                    toolbar.setTitle("화요일 목표리스트");
+                    if (language.equals("ko")) {
+                        toolbar.setTitle("화요일 목표리스트");
+                    }else{
+                        toolbar.setTitle("Tuesday target list");
+                    }
                     break;
                 case 4:
-                    toolbar.setTitle("수요일 목표리스트");
+                    if (language.equals("ko")) {
+                        toolbar.setTitle("수요일 목표리스트");
+                    }else{
+                        toolbar.setTitle("Wednesday goal list");
+                    }
                     break;
                 case 5:
-                    toolbar.setTitle("목요일 목표리스트");
+                    if (language.equals("ko")) {
+                        toolbar.setTitle("목요일 목표리스트");
+                    }else{
+                        toolbar.setTitle("Thursday goal list");
+                    }
                     break;
                 case 6:
-                    toolbar.setTitle("금요일 목표리스트");
+                    if (language.equals("ko")) {
+                        toolbar.setTitle("금요일 목표리스트");
+                    }else{
+                        toolbar.setTitle("Friday goal list");
+                    }
                     break;
                 case 7:
-                    toolbar.setTitle("토요일 목표리스트");
+                    if (language.equals("ko")) {
+                        toolbar.setTitle("토요일 목표리스트");
+                    }else{
+                        toolbar.setTitle("Saturday goal list");
+                    }
                     break;
             }
 

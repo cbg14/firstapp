@@ -21,4 +21,7 @@ public interface Todo_calendarDao {
 
     @Query("UPDATE todo_calendar SET title=:title WHERE id=:id")
     public void UPDATE(String title ,int id);
+
+    @Query("SELECT *FROM Todo_calendar WHERE id=:id")
+   List<Todo_calendar> select(int id);
 }

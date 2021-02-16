@@ -222,7 +222,7 @@
                 android:layout_weight="1"
                 android:gravity="right"
                 android:maxLines="4"
-                android:text="100%"
+                android:text="0%"
                 android:textColor="#000000" />
 
             <TextView
@@ -233,7 +233,7 @@
                 android:layout_weight="1"
                 android:gravity="right"
                 android:maxLines="4"
-                android:text="100%"
+                android:text="0%"
                 android:textColor="#000000" />
 
             <TextView
@@ -244,7 +244,7 @@
                 android:layout_weight="1"
                 android:gravity="right"
                 android:maxLines="4"
-                android:text="100%"
+                android:text="0%"
                 android:textColor="#000000" />
 
             <TextView
@@ -255,7 +255,7 @@
                 android:layout_weight="1"
                 android:gravity="right"
                 android:maxLines="4"
-                android:text="100%"
+                android:text="0%"
                 android:textColor="#000000" />
 
             <TextView
@@ -266,7 +266,7 @@
                 android:layout_weight="1"
                 android:gravity="right"
                 android:maxLines="4"
-                android:text="100%"
+                android:text="0%"
                 android:textColor="#000000" />
 
             <TextView
@@ -277,7 +277,7 @@
                 android:layout_weight="1"
                 android:gravity="right"
                 android:maxLines="4"
-                android:text="100%"
+                android:text="0%"
                 android:textColor="#000000" />
 
             <TextView
@@ -288,7 +288,7 @@
                 android:layout_weight="1"
                 android:gravity="right"
                 android:maxLines="4"
-                android:text="100%"
+                android:text="0%"
                 android:textColor="#000000" />
 
 
@@ -297,6 +297,9 @@
 
 <!--AdView 자동으로 포커스 가지면서 키패드 열리는 문제를
 속성에 android:descendantFocusability="blocksDescendants" 를 추가해줬더니 해결되었다.-->
+<!--  실제 ID  app:adUnitId="ca-app-pub-6723060508831262/6824608666"-->
+    <!--  테스트 ID  app:adUnitId="ca-app-pub-3940256099942544/6300978111"-->
+
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
@@ -309,7 +312,8 @@
         app:adUnitId="ca-app-pub-6723060508831262/6824608666"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"></com.google.android.gms.ads.AdView>
+        app:layout_constraintRight_toRightOf="parent">
+    </com.google.android.gms.ads.AdView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
